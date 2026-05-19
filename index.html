@@ -1,0 +1,624 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ink:#1a1714;--paper:#f5f0e8;--paper2:#e8e2d6;--paper3:#c8bfb0;--paper4:#d8d0c4;
+  --red:#9e2318;--blue:#0f2d4a;--warm:#5c3d1e;--body:#2e2318;--sub:#4a3828;
+  --light-red:#f9e8e6;--light-blue:#e6eff8;
+}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:'Instrument Sans',sans-serif;overflow-x:hidden;cursor:none}
+@media(max-width:768px){body{cursor:auto}.cursor-dot,.cursor-ring{display:none}}
+.cursor-dot{position:fixed;width:8px;height:8px;background:var(--red);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%)}
+.cursor-ring{position:fixed;width:32px;height:32px;border:1.5px solid var(--red);border-radius:50%;pointer-events:none;z-index:9998;transition:width .2s,height .2s,opacity .2s;transform:translate(-50%,-50%);opacity:.6}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;background:rgba(245,240,232,.97);backdrop-filter:blur(12px);border-bottom:1.5px solid var(--paper3)}
+.nav-name{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--ink)}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{font-family:'DM Mono',monospace;font-size:.65rem;color:var(--sub);text-decoration:none;letter-spacing:.08em;text-transform:uppercase;transition:color .2s;cursor:none}
+.nav-links a:hover,.nav-links a.active{color:var(--red)}
+.nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+.nav-hamburger span{display:block;width:22px;height:2px;background:var(--ink);transition:all .3s}
+.mobile-menu{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--paper);z-index:400;flex-direction:column;align-items:center;justify-content:center;gap:2.5rem}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-family:'DM Serif Display',serif;font-size:2rem;color:var(--ink);text-decoration:none;font-style:italic}
+.mobile-menu a:hover{color:var(--red)}
+.mobile-close{position:absolute;top:1.5rem;right:2rem;font-family:'DM Mono',monospace;font-size:.75rem;color:var(--sub);cursor:pointer;letter-spacing:.1em;text-transform:uppercase}
+@media(max-width:768px){.nav-links{display:none}.nav-hamburger{display:flex}}
+
+/* SECTIONS */
+section{display:none;min-height:100vh;padding:6rem 1.5rem 3rem}
+section.active{display:block;animation:fi .3s ease}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+#home{padding-top:0}
+
+.page-label{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--sub);margin-bottom:.75rem;display:flex;align-items:center;gap:.75rem}
+.page-label::before{content:'';display:block;width:2rem;height:1px;background:var(--sub)}
+.page-title{font-family:'DM Serif Display',serif;font-size:clamp(2rem,5vw,4rem);line-height:.95;letter-spacing:-.03em;margin-bottom:2rem;color:var(--ink)}
+.page-title em{font-style:italic;color:var(--red)}
+
+/* HOME */
+.home-inner{position:relative;z-index:1;padding:0 2rem}
+.home-bg-num{position:absolute;right:-2%;top:50%;transform:translateY(-50%);font-family:'DM Serif Display',serif;font-size:28vw;color:rgba(26,23,20,.05);line-height:1;pointer-events:none;user-select:none}
+@media(max-width:768px){.home-bg-num{font-size:50vw;right:-5%;top:30%}}
+
+.home-top{padding-top:6rem;display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start}
+@media(max-width:768px){.home-top{grid-template-columns:1fr;padding-top:5rem;gap:1.5rem}}
+
+.home-eyebrow{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--sub);margin-bottom:1.25rem;display:flex;align-items:center;gap:.75rem}
+.home-eyebrow::before{content:'';display:block;width:2rem;height:1px;background:var(--sub)}
+.hero-name{font-family:'DM Serif Display',serif;font-size:clamp(3.5rem,8vw,7rem);line-height:.95;letter-spacing:-.03em;color:var(--ink)}
+.hero-name .line2{display:block;color:var(--red);font-style:italic}
+
+.home-top-right{display:flex;flex-direction:column;gap:1.25rem;align-items:flex-end;padding-top:7rem}
+@media(max-width:768px){.home-top-right{align-items:flex-start;padding-top:0}}
+.home-top-right p{font-size:.86rem;line-height:1.8;color:var(--body);text-align:right}
+@media(max-width:768px){.home-top-right p{text-align:left}}
+.home-dl{display:inline-flex;align-items:center;gap:.6rem;padding:.7rem 1.4rem;background:var(--ink);color:var(--paper);font-family:'DM Mono',monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;transition:background .2s;cursor:none}
+@media(max-width:768px){.home-dl{cursor:pointer}}
+.home-dl:hover{background:var(--red)}
+
+.home-divider{margin:2.5rem 0;height:1.5px;background:var(--paper3);position:relative}
+.home-divider::after{content:'Senior · 2025';position:absolute;right:0;top:50%;transform:translateY(-50%);background:var(--paper);padding:0 .75rem;font-family:'DM Mono',monospace;font-size:.58rem;color:var(--sub);letter-spacing:.15em}
+@media(max-width:768px){.home-divider::after{content:'Senior'}}
+
+.home-mid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;border:1.5px solid var(--paper3)}
+@media(max-width:480px){.home-mid{grid-template-columns:1fr}}
+.hm-cell{padding:1.25rem;border-right:1.5px solid var(--paper3)}
+.hm-cell:last-child{border-right:none}
+@media(max-width:480px){.hm-cell{border-right:none;border-bottom:1.5px solid var(--paper3)}.hm-cell:last-child{border-bottom:none}}
+.hm-num{font-family:'DM Serif Display',serif;font-size:2.25rem;color:var(--red);line-height:1;margin-bottom:.35rem}
+.hm-label{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--body)}
+
+.home-bottom{margin-top:3rem;padding-bottom:3rem}
+.headline-big{font-family:'DM Serif Display',serif;font-size:clamp(1.5rem,3vw,2.75rem);line-height:1.2;letter-spacing:-.02em;color:var(--ink);max-width:680px;margin-bottom:2rem}
+.headline-big em{font-style:italic;color:var(--red)}
+.home-tags{display:flex;flex-wrap:wrap;gap:.4rem}
+.htag{font-family:'DM Mono',monospace;font-size:.63rem;padding:.3rem .75rem;border:1.5px solid var(--paper3);color:var(--body);letter-spacing:.05em;transition:all .2s}
+.htag.focus{border-color:var(--red);color:var(--red);background:var(--light-red)}
+
+/* RESUME */
+.resume-layout{display:grid;grid-template-columns:200px 1fr;gap:3rem;align-items:start}
+@media(max-width:768px){.resume-layout{grid-template-columns:1fr;gap:2rem}}
+.rs-block{margin-bottom:2rem}
+.rs-label{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--sub);margin-bottom:.85rem;padding-bottom:.5rem;border-bottom:1.5px solid var(--paper3)}
+.rs-item{margin-bottom:.85rem}
+.rs-item-name{font-size:.88rem;font-weight:600;color:var(--ink);margin-bottom:.2rem}
+.rs-item-sub{font-family:'DM Mono',monospace;font-size:.66rem;color:var(--body);letter-spacing:.04em;margin-top:.15rem}
+.rs-item-date{font-family:'DM Mono',monospace;font-size:.62rem;color:var(--sub);margin-top:.2rem}
+.cert-earned{display:inline-block;font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;padding:.18rem .5rem;background:var(--light-red);color:var(--red);border:1.5px solid var(--red);margin-top:.3rem;font-weight:500}
+.skill-row{margin:.5rem 0}
+.skill-name{font-size:.78rem;color:var(--ink);margin-bottom:.3rem;display:flex;justify-content:space-between;align-items:baseline}
+.skill-name span{font-family:'DM Mono',monospace;font-size:.62rem;color:var(--sub)}
+.skill-track{height:2px;background:var(--paper3)}
+.skill-fill{height:100%;background:var(--ink)}
+.tools-wrap{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.5rem}
+.tool{font-family:'DM Mono',monospace;font-size:.62rem;padding:.28rem .65rem;border:1.5px solid var(--paper3);color:var(--body);letter-spacing:.04em;transition:all .2s}
+.tool:hover{border-color:var(--ink);color:var(--ink)}
+
+.rm-section{margin-bottom:2.5rem;padding-bottom:2.5rem;border-bottom:1.5px solid var(--paper3)}
+.rm-section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.rm-sec-label{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--red);margin-bottom:1.25rem;font-weight:500}
+.rm-entry{margin-bottom:1.75rem;display:grid;grid-template-columns:110px 1fr;gap:1.25rem}
+@media(max-width:480px){.rm-entry{grid-template-columns:1fr;gap:.5rem}}
+.rm-entry:last-child{margin-bottom:0}
+.rm-entry-co{font-weight:600;font-size:.88rem;color:var(--ink)}
+.rm-entry-date{font-family:'DM Mono',monospace;font-size:.62rem;color:var(--sub);margin-top:.2rem}
+.rm-entry-title{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--ink);margin-bottom:.45rem}
+.rm-entry-desc{font-size:.82rem;color:var(--body);line-height:1.82}
+.rm-entry-desc li{list-style:none;padding-left:1.1em;position:relative;margin:.25rem 0}
+.rm-entry-desc li::before{content:'—';position:absolute;left:0;color:var(--sub)}
+.project-card{padding:1.25rem;background:var(--paper2);margin-bottom:3px;border-left:3px solid transparent;transition:border-color .2s}
+.project-card:hover{border-left-color:var(--red)}
+.pc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.6rem}
+.pc-title{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--ink)}
+.pc-year{font-family:'DM Mono',monospace;font-size:.62rem;color:var(--sub);flex-shrink:0;margin-left:.5rem}
+.pc-stack{font-family:'DM Mono',monospace;font-size:.64rem;color:var(--red);margin-bottom:.6rem;font-weight:500}
+.pc-desc{font-size:.8rem;color:var(--body);line-height:1.78}
+
+/* ANALYZER */
+.az-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:3px}
+@media(max-width:768px){.az-grid{grid-template-columns:1fr}}
+.az-pane{background:var(--paper2);padding:1.25rem;border:1.5px solid var(--paper3)}
+.az-pane-label{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--sub);margin-bottom:.75rem;font-weight:500}
+textarea{width:100%;background:var(--paper);border:1.5px solid var(--paper3);color:var(--ink);font-family:'DM Mono',monospace;font-size:.7rem;line-height:1.75;padding:.8rem;resize:vertical;outline:none;transition:border-color .2s;min-height:200px}
+textarea:focus{border-color:var(--ink)}
+textarea::placeholder{color:var(--sub);opacity:.8}
+.az-run{width:100%;padding:1rem;background:var(--warm);color:#fff;font-family:'DM Mono',monospace;font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;border:none;cursor:none;transition:background .2s;margin-top:3px}
+@media(max-width:768px){.az-run{cursor:pointer}}
+.az-run:hover{background:var(--red)}
+.az-run:disabled{background:var(--paper3);color:var(--sub);cursor:not-allowed}
+.az-results{display:none;margin-top:3px}
+.az-results.show{display:block;animation:fi .4s ease}
+.results-score{background:var(--paper2);border:1.5px solid var(--paper3);padding:1.75rem;display:grid;grid-template-columns:110px 1fr;gap:2rem;align-items:start;margin-bottom:3px}
+@media(max-width:480px){.results-score{grid-template-columns:1fr;gap:1rem}}
+.score-num{font-family:'DM Serif Display',serif;font-size:4.5rem;line-height:1;letter-spacing:-.03em}
+.score-num.hi{color:var(--blue)}.score-num.mid{color:var(--warm)}.score-num.lo{color:var(--red)}
+.score-meta-label{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--sub);margin-bottom:.3rem}
+.score-verdict{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--ink);font-style:italic;margin-bottom:1rem;line-height:1.3}
+.kw-row{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+@media(max-width:480px){.kw-row{grid-template-columns:1fr}}
+.kw-col-title{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.5rem;font-weight:500}
+.kw-col-title.g{color:var(--blue)}.kw-col-title.r{color:var(--red)}
+.kwp{display:inline-block;font-family:'DM Mono',monospace;font-size:.63rem;padding:.2rem .55rem;margin:.12rem;letter-spacing:.04em;font-weight:500}
+.kwp.m{background:var(--light-blue);color:var(--blue);border:1.5px solid rgba(15,45,74,.25)}
+.kwp.x{background:var(--light-red);color:var(--red);border:1.5px solid rgba(158,35,24,.25)}
+.suggestions-block{background:var(--paper2);border:1.5px solid var(--paper3);padding:1.75rem;margin-bottom:3px}
+.suggestions-title{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--sub);margin-bottom:1rem;font-weight:500}
+.suggestion-item{display:flex;gap:.85rem;padding:.8rem 0;border-bottom:1.5px solid var(--paper3);align-items:flex-start}
+.suggestion-item:last-child{border-bottom:none;padding-bottom:0}
+.sug-num{font-family:'DM Serif Display',serif;font-size:1.35rem;color:var(--paper3);line-height:1;flex-shrink:0;width:2rem}
+.sug-label{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--red);margin-bottom:.25rem;font-weight:500}
+.sug-text{font-size:.83rem;color:var(--body);line-height:1.7}
+.sug-text strong{color:var(--ink);font-weight:600}
+.generate-section{background:var(--paper3);border:1.5px solid var(--paper4);padding:1.75rem;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;margin-bottom:3px;flex-wrap:wrap}
+.generate-heading{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--ink);font-style:italic;margin-bottom:.25rem}
+.generate-sub{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--sub)}
+.generate-btn{padding:.85rem 2rem;background:var(--ink);color:var(--paper);font-family:'DM Mono',monospace;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;border:none;cursor:none;transition:all .2s;white-space:nowrap;flex-shrink:0}
+@media(max-width:768px){.generate-btn{cursor:pointer;width:100%}}
+.generate-btn:hover{background:var(--red)}
+.generate-btn:disabled{background:var(--sub);color:var(--paper3);cursor:not-allowed}
+.resume-preview-wrap{display:none;margin-bottom:3px}
+.resume-preview-wrap.show{display:block;animation:fi .4s ease}
+.resume-preview-header{background:var(--paper2);border:1.5px solid var(--paper3);border-bottom:none;padding:1.1rem 1.75rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.rph-label{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--sub);margin-bottom:.2rem}
+.rph-title{font-size:.9rem;font-weight:600;color:var(--ink)}
+.dl-btn{padding:.65rem 1.5rem;background:var(--red);color:#fff;font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;border:none;cursor:none;transition:background .2s}
+@media(max-width:768px){.dl-btn{cursor:pointer}}
+.dl-btn:hover{background:#7a1a10}
+.resume-doc{background:#fff;padding:2.5rem 2.25rem;font-family:'Instrument Sans',sans-serif;color:#111;font-size:.8rem;line-height:1.6;border:1.5px solid var(--paper3);overflow-x:auto}
+@media(max-width:480px){.resume-doc{padding:1.5rem 1.25rem}}
+.rdoc-name{font-size:1.6rem;font-weight:700;letter-spacing:-.02em;color:#000;margin-bottom:.2rem}
+.rdoc-contact{font-size:.73rem;color:#333;margin-bottom:.15rem;line-height:1.5}
+.rdoc-divider{height:2px;background:#000;margin:.85rem 0}
+.rdoc-section{margin-bottom:1.1rem}
+.rdoc-sec-title{font-size:.66rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#000;border-bottom:1px solid #000;padding-bottom:.22rem;margin-bottom:.65rem}
+.rdoc-entry{margin-bottom:.75rem}
+.rdoc-entry-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.12rem;flex-wrap:wrap;gap:.25rem}
+.rdoc-entry-title{font-size:.86rem;font-weight:700;color:#000}
+.rdoc-entry-date{font-size:.73rem;color:#444;flex-shrink:0}
+.rdoc-entry-sub{font-size:.76rem;color:#222;font-style:italic;margin-bottom:.28rem}
+.rdoc-entry-desc{font-size:.76rem;color:#222;line-height:1.65}
+.rdoc-entry-desc li{list-style:none;padding-left:1.1em;position:relative;margin:.18rem 0}
+.rdoc-entry-desc li::before{content:'•';position:absolute;left:0;color:#000;font-weight:700}
+.rdoc-skills-grid{display:grid;grid-template-columns:78px 1fr;gap:.3rem .65rem;font-size:.76rem}
+.rdoc-skill-cat{font-weight:700;color:#000}
+.rdoc-skill-val{color:#222}
+.highlight-kw{font-weight:700;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px;color:#000}
+
+/* CONTACT */
+.ct-big{font-family:'DM Serif Display',serif;font-size:clamp(2.5rem,6vw,5.5rem);line-height:.95;letter-spacing:-.04em;margin:2rem 0 2.5rem;color:var(--ink)}
+.ct-big em{font-style:italic;color:var(--red)}
+.ct-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:3px}
+@media(max-width:768px){.ct-row{grid-template-columns:1fr 1fr}}
+@media(max-width:400px){.ct-row{grid-template-columns:1fr}}
+.ct-card{background:var(--paper2);padding:1.25rem 1rem;transition:background .2s;text-decoration:none;display:block;border:1.5px solid var(--paper3)}
+.ct-card:hover{background:var(--paper3)}
+.ct-card-label{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--sub);margin-bottom:.5rem;font-weight:500}
+.ct-card-val{font-size:.82rem;color:var(--ink);word-break:break-all;line-height:1.5}
+.ct-card-arrow{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--red);margin-top:.65rem;display:block;font-weight:500}
+.ct-avail{margin-top:1.75rem;display:flex;align-items:center;gap:.85rem;flex-wrap:wrap}
+.avail-dot{width:8px;height:8px;background:var(--blue);border-radius:50%;flex-shrink:0}
+.avail-txt{font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.06em;color:var(--body)}
+.avail-txt strong{color:var(--ink)}
+</style>
+
+<div class="cursor-dot" id="cd"></div>
+<div class="cursor-ring" id="cr"></div>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <span class="mobile-close" onclick="closeMobile()">✕ Close</span>
+  <a onclick="pg('home',null);closeMobile()">Home</a>
+  <a onclick="pg('resume',null);closeMobile()">Resume</a>
+  <a onclick="pg('analyzer',null);closeMobile()">Analyzer</a>
+  <a onclick="pg('contact',null);closeMobile()">Contact</a>
+</div>
+
+<nav>
+  <div class="nav-name">Arnob Mandal</div>
+  <ul class="nav-links">
+    <li><a onclick="pg('home',this)" class="active">Home</a></li>
+    <li><a onclick="pg('resume',this)">Resume</a></li>
+    <li><a onclick="pg('analyzer',this)">Analyzer</a></li>
+    <li><a onclick="pg('contact',this)">Contact</a></li>
+  </ul>
+  <div class="nav-hamburger" onclick="document.getElementById('mobileMenu').classList.add('open')">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HOME -->
+<section id="home" class="active" style="padding:0;position:relative;overflow:hidden;min-height:100vh">
+  <div class="home-bg-num">AM</div>
+  <div class="home-inner">
+    <div class="home-top">
+      <div>
+        <div class="home-eyebrow">Senior IT Student · GMU · Cybersecurity</div>
+        <h1 class="hero-name">Arnob<span class="line2">Mandal.</span></h1>
+      </div>
+      <div class="home-top-right">
+        <p>4th-year IT student at George Mason University building at the intersection of cybersecurity, systems, and digital forensics. Turning ideas into practical tools through code, networking, and security research.</p>
+        <a class="home-dl" href="https://github.com/arnobmandalwork-code/arnobmandalwork-code/raw/main/Mandal_Resume.pdf" target="_blank">↓ Download Resume</a>
+      </div>
+    </div>
+    <div class="home-divider"></div>
+    <div class="home-mid">
+      <div class="hm-cell"><div class="hm-num">2K+</div><div class="hm-label">Tutoring Hours</div></div>
+      <div class="hm-cell"><div class="hm-num">4</div><div class="hm-label">Languages Spoken</div></div>
+      <div class="hm-cell"><div class="hm-num">2+</div><div class="hm-label">Projects Shipped</div></div>
+    </div>
+    <div class="home-bottom">
+      <p class="headline-big">I build tools that <em>actually work</em> — AI analyzers, career dashboards, and systems that solve real problems.</p>
+      <div class="home-tags">
+        <span class="htag focus">Cybersecurity</span><span class="htag focus">Digital Forensics</span><span class="htag focus">Python</span>
+        <span class="htag">Linux · Kali</span><span class="htag">SIEM · IDS/IPS</span><span class="htag">Network Security</span>
+        <span class="htag">SQL</span><span class="htag">Wireshark</span><span class="htag">Git · GitHub</span>
+        <span class="htag">AI / NLP</span><span class="htag">Binary Analysis</span><span class="htag">Bash</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESUME -->
+<section id="resume">
+  <div class="page-label">My Background</div>
+  <h2 class="page-title">What I've<br><em>Been Building</em></h2>
+  <div class="resume-layout">
+    <div>
+      <div class="rs-block">
+        <div class="rs-label">Education</div>
+        <div class="rs-item">
+          <div class="rs-item-name">George Mason University</div>
+          <div class="rs-item-sub">B.S. Information Technology</div>
+          <div class="rs-item-sub">Cybersecurity Concentration</div>
+          <div class="rs-item-sub" style="color:var(--red);font-weight:500">Senior — Expected May 2027</div>
+          <div class="rs-item-date">Fairfax, VA</div>
+        </div>
+      </div>
+      <div class="rs-block">
+        <div class="rs-label">Certifications</div>
+        <div class="rs-item">
+          <div class="rs-item-name">Google Cybersecurity</div>
+          <div class="rs-item-sub">Professional Certificate</div>
+          <span class="cert-earned">✓ Earned</span>
+        </div>
+        <div class="rs-item" style="margin-top:.75rem">
+          <div class="rs-item-name">CompTIA Security+</div>
+          <div class="rs-item-sub">In progress</div>
+        </div>
+        <div class="rs-item">
+          <div class="rs-item-name">Cisco CCNA</div>
+          <div class="rs-item-sub">Planned</div>
+        </div>
+      </div>
+      <div class="rs-block">
+        <div class="rs-label">Core Skills</div>
+        <div class="skill-row"><div class="skill-name">Python <span>Advanced</span></div><div class="skill-track"><div class="skill-fill" style="width:85%"></div></div></div>
+        <div class="skill-row"><div class="skill-name">Linux / Bash <span>Strong</span></div><div class="skill-track"><div class="skill-fill" style="width:78%"></div></div></div>
+        <div class="skill-row"><div class="skill-name">SQL <span>Strong</span></div><div class="skill-track"><div class="skill-fill" style="width:75%"></div></div></div>
+        <div class="skill-row"><div class="skill-name">Digital Forensics <span>Strong</span></div><div class="skill-track"><div class="skill-fill" style="width:80%"></div></div></div>
+        <div class="skill-row"><div class="skill-name">Network Security <span>Solid</span></div><div class="skill-track"><div class="skill-fill" style="width:72%"></div></div></div>
+        <div class="skill-row"><div class="skill-name">Java <span>Intermediate</span></div><div class="skill-track"><div class="skill-fill" style="width:60%"></div></div></div>
+      </div>
+      <div class="rs-block">
+        <div class="rs-label">Tools</div>
+        <div class="tools-wrap"><span class="tool">Kali Linux</span><span class="tool">Wireshark</span><span class="tool">Metasploit</span><span class="tool">Nmap</span><span class="tool">Autopsy</span><span class="tool">Git</span><span class="tool">VS Code</span><span class="tool">Packet Tracer</span><span class="tool">SIEM</span><span class="tool">IDS/IPS</span></div>
+      </div>
+      <div class="rs-block">
+        <div class="rs-label">Activities</div>
+        <div class="rs-item">
+          <div class="rs-item-name">Nexus Hawks</div>
+          <div class="rs-item-sub">Cybersecurity Club · GMU</div>
+        </div>
+        <div class="rs-item">
+          <div class="rs-item-name">Robotics Club</div>
+          <div class="rs-item-sub">GMU · Embedded Systems</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="rm-section">
+        <div class="rm-sec-label">Projects</div>
+        <div class="project-card">
+          <div class="pc-top"><div class="pc-title">AI-Powered Resume Analyzer</div><div class="pc-year">2024</div></div>
+          <div class="pc-stack">Python · NLP · Keyword Extraction · Decision Support</div>
+          <div class="pc-desc">Architected a Python NLP pipeline to parse resumes and score alignment against job descriptions using keyword extraction and cosine similarity algorithms, automating candidate screening logic. Generated structured compatibility reports with actionable recommendations, demonstrating applied AI-driven automation.</div>
+        </div>
+        <div class="project-card">
+          <div class="pc-top"><div class="pc-title">Career Command Center</div><div class="pc-year">2025</div></div>
+          <div class="pc-stack">HTML · CSS · JavaScript · AI Integration</div>
+          <div class="pc-desc">Designed and built an interactive career portfolio and resume dashboard from scratch; features a live AI-powered resume analyzer that scores job description alignment, generates keyword-optimized tailored resumes, and exports downloadable PDFs — no templates used.</div>
+        </div>
+      </div>
+      <div class="rm-section">
+        <div class="rm-sec-label">Experience</div>
+        <div class="rm-entry">
+          <div><div class="rm-entry-co">Burlington Stores</div><div class="rm-entry-date">2025</div></div>
+          <div><div class="rm-entry-title">Retail Associate</div><ul class="rm-entry-desc"><li>Operated and troubleshot POS terminal hardware and payment processing software; diagnosed hardware faults, performed system resets, and escalated persistent issues to reduce transaction downtime.</li><li>Utilized enterprise inventory management systems to perform real-time stock audits, data entry, and compliance checks, maintaining data accuracy across product databases.</li></ul></div>
+        </div>
+        <div class="rm-entry">
+          <div><div class="rm-entry-co">Food Lion</div><div class="rm-entry-date">2023 – Present</div></div>
+          <div><div class="rm-entry-title">Customer Lead</div><ul class="rm-entry-desc"><li>Operated RF handheld scanning devices and barcode systems to conduct real-time inventory audits, price verification, and automated reorder triggering within store management software.</li><li>Identified, triaged, and escalated self-checkout kiosk hardware and software malfunctions to IT personnel, documenting fault patterns to support recurring issue resolution.</li></ul></div>
+        </div>
+        <div class="rm-entry">
+          <div><div class="rm-entry-co">NOVA Parks</div><div class="rm-entry-date">2022 – 2024</div></div>
+          <div><div class="rm-entry-title">Supervisor</div><ul class="rm-entry-desc"><li>Administered POS systems, digital scheduling platforms, and cloud-based reservation software; resolved technical issues and coordinated with IT to maintain system uptime and data integrity.</li><li>Trained staff on digital workflow tools including scheduling software and communication platforms, reducing operational errors through standardized system usage protocols.</li></ul></div>
+        </div>
+        <div class="rm-entry">
+          <div><div class="rm-entry-co">Tutor.com</div><div class="rm-entry-date">2021 – 2024</div></div>
+          <div><div class="rm-entry-title">Online Tutor</div><ul class="rm-entry-desc"><li>Delivered 2,000+ hours of technical instruction via LMS platforms and remote collaboration tools including screen sharing, virtual whiteboards, and real-time co-editing environments.</li><li>Supported students in Python, SQL, and math coursework — reinforcing technical communication and problem-solving skills directly applicable to IT help desk and support roles.</li></ul></div>
+        </div>
+      </div>
+      <div class="rm-section">
+        <div class="rm-sec-label">Activities</div>
+        <div class="rm-entry">
+          <div><div class="rm-entry-co">Robotics</div></div>
+          <div><ul class="rm-entry-desc"><li>Engineered robotic systems with microcontrollers, embedded sensors, and motor drivers; competed in events focused on real-time autonomous control and hardware-software integration.</li></ul></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ANALYZER -->
+<section id="analyzer">
+  <div class="page-label">Tool</div>
+  <h2 class="page-title">Resume<br><em>Analyzer</em></h2>
+  <div class="az-grid">
+    <div class="az-pane">
+      <div class="az-pane-label">My Resume</div>
+      <textarea id="rTxt">Arnob Mandal — Senior IT Student, George Mason University, Cybersecurity Concentration (4th year).
+Skills: Python, Java, JavaScript, SQL, HTML, CSS, Bash, Linux CLI, SIEM, IDS/IPS, Vulnerability Assessment, Threat Analysis, Digital Forensics, Incident Response, Network Security, File System Internals, Binary Analysis, Data Recovery, AI/ML Automation, Prompt Engineering.
+Tools: Kali Linux, Wireshark, Metasploit, VS Code, Git, Google Workspace, Cisco Packet Tracer, Nmap, Autopsy.
+Projects: AI Resume Analyzer (Python, NLP, keyword extraction, cosine similarity, automation, decision support), Career Command Center (HTML, CSS, JavaScript, AI integration, PDF export, keyword optimization).
+Certifications: Google Cybersecurity Professional Certificate (SIEM, IDS/IPS, Vulnerability Assessment, Python, Linux, SQL).
+Experience: Burlington Stores retail associate POS hardware troubleshooting inventory management; Food Lion customer lead RF scanners barcode inventory POS software; NOVA Parks supervisor POS systems digital scheduling cloud reservation software IT coordination; Tutor.com online tutor 2000+ hours Python SQL math LMS platforms.
+Activities: Robotics microcontrollers embedded sensors motor drivers autonomous control hardware software integration.</textarea>
+    </div>
+    <div class="az-pane">
+      <div class="az-pane-label">Job Description</div>
+      <textarea id="jTxt" placeholder="Paste any job description here — the analyzer will score your match, give specific suggestions, and offer to generate a tailored resume PDF."></textarea>
+    </div>
+  </div>
+  <button class="az-run" id="azBtn" onclick="runAz()">Run Analysis →</button>
+
+  <div class="az-results" id="azResults">
+    <div class="results-score">
+      <div>
+        <div class="score-num" id="azScore">—</div>
+        <div class="score-meta-label">Match Score</div>
+      </div>
+      <div>
+        <div class="score-verdict" id="azVerdict"></div>
+        <div class="kw-row">
+          <div><div class="kw-col-title g">Matched keywords</div><div id="azMatch"></div></div>
+          <div><div class="kw-col-title r">Missing keywords</div><div id="azMiss"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="suggestions-block">
+      <div class="suggestions-title">Suggestions to strengthen this application</div>
+      <div id="azSuggestions"></div>
+    </div>
+    <div class="generate-section">
+      <div>
+        <div class="generate-heading">Want a tailored resume for this role?</div>
+        <div class="generate-sub">Reordered · Keyword-optimized · Ready to download as PDF</div>
+      </div>
+      <button class="generate-btn" id="generateBtn" onclick="generateResume()">Generate Tailored Resume →</button>
+    </div>
+    <div class="resume-preview-wrap" id="resumePreviewWrap">
+      <div class="resume-preview-header">
+        <div>
+          <div class="rph-label">Tailored Resume · Optimized for this role</div>
+          <div class="rph-title">Arnob Mandal</div>
+        </div>
+        <button class="dl-btn" onclick="downloadPDF()">↓ Download PDF</button>
+      </div>
+      <div class="resume-doc" id="resumeDoc"></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" style="display:flex;flex-direction:column;justify-content:center">
+  <div class="page-label">Let's connect</div>
+  <div class="ct-big">Got an opportunity?<br><em>Let's talk.</em></div>
+  <div class="ct-row">
+    <a class="ct-card" href="mailto:arnobmandalwork@gmail.com"><div class="ct-card-label">Email</div><div class="ct-card-val">arnobmandalwork@gmail.com</div><span class="ct-card-arrow">↗</span></a>
+    <a class="ct-card" href="https://www.linkedin.com/in/arnobmandal/" target="_blank"><div class="ct-card-label">LinkedIn</div><div class="ct-card-val">linkedin.com/in/arnobmandal</div><span class="ct-card-arrow">↗</span></a>
+    <a class="ct-card" href="https://github.com/arnobmandalwork-code" target="_blank"><div class="ct-card-label">GitHub</div><div class="ct-card-val">github.com/arnobmandalwork-code</div><span class="ct-card-arrow">↗</span></a>
+    <a class="ct-card" href="https://github.com/arnobmandalwork-code/arnobmandalwork-code/raw/main/Mandal_Resume.pdf" target="_blank"><div class="ct-card-label">Resume</div><div class="ct-card-val">Download PDF</div><span class="ct-card-arrow">↓</span></a>
+  </div>
+  <div class="ct-avail"><div class="avail-dot"></div><div class="avail-txt">Currently open to <strong>internships and entry-level roles</strong> · Fairfax, VA · Senior · Class of 2027</div></div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+// Cursor
+const cd=document.getElementById('cd'),cr=document.getElementById('cr');
+document.addEventListener('mousemove',e=>{cd.style.left=e.clientX+'px';cd.style.top=e.clientY+'px';cr.style.left=e.clientX+'px';cr.style.top=e.clientY+'px'});
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cr.style.width='48px';cr.style.height='48px';cr.style.opacity='1'});
+  el.addEventListener('mouseleave',()=>{cr.style.width='32px';cr.style.height='32px';cr.style.opacity='.6'});
+});
+
+function closeMobile(){document.getElementById('mobileMenu').classList.remove('open')}
+
+function pg(id,el){
+  document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(el)el.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+const stop=new Set(['and','the','for','with','are','has','have','been','that','this','from','your','will','can','all','our','you','not','but','its','was','were','they','their','into','also','each','both','who','when','what','more','other','than','then','them','these','about','which','there','should','would','could','being','using','based','work','role','team','must','able','strong','good','years','experience','skills','knowledge','including','related','required','responsibilities','job','candidate','company','position','provide','ensure','support','develop','manage','create','build','design','implement','understand','familiarity','proficiency','preferred','plus','bonus','seeking','looking','opportunity','qualified','demonstrate','ability','contribute']);
+function tok(t){return t.toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/).filter(w=>w.length>2&&!stop.has(w))}
+
+let state={matching:[],missing:[],score:0,projOrder:[0,1],kws:new Set()};
+
+const PROJECTS=[
+  {title:'AI-Powered Resume Analyzer',year:'2024',stack:'Python · NLP · Keyword Extraction · Decision Support',bullets:['Architected a Python NLP pipeline to parse resumes and score alignment against job descriptions using keyword extraction and cosine similarity algorithms, automating candidate screening logic.','Generated structured compatibility reports with actionable recommendations, demonstrating applied experience in AI-driven automation and intelligent data processing.']},
+  {title:'Career Command Center',year:'2025',stack:'HTML · CSS · JavaScript · AI Integration',bullets:['Designed and built an interactive career portfolio and resume dashboard from scratch; features a live AI-powered resume analyzer that scores job description alignment, generates keyword-optimized tailored resumes, and exports downloadable PDFs.','Implemented full-stack product thinking across design, functionality, and user experience — no templates used.']}
+];
+
+const EXPERIENCE=[
+  {co:'Burlington Stores, Inc',title:'Retail Associate',date:'2025',bullets:['Operated and troubleshot POS terminal hardware and payment processing software; diagnosed hardware faults, performed system resets, and escalated persistent issues to reduce transaction downtime.','Utilized enterprise inventory management systems to perform real-time stock audits, data entry, and compliance checks, maintaining data accuracy across product databases.']},
+  {co:'Food Lion',title:'Customer Lead',date:'2023 – Present',bullets:['Operated RF handheld scanning devices and barcode systems to conduct real-time inventory audits, price verification, and automated reorder triggering within store management software.','Identified, triaged, and escalated self-checkout kiosk hardware and software malfunctions to IT personnel, documenting fault patterns to support recurring issue resolution.']},
+  {co:'NOVA Parks',title:'Supervisor',date:'2022 – 2024',bullets:['Administered POS systems, digital scheduling platforms, and cloud-based reservation software; resolved technical issues and coordinated with IT to maintain system uptime and data integrity.','Trained staff on digital workflow tools including scheduling software and communication platforms, reducing operational errors through standardized system usage protocols.']},
+  {co:'Tutor.com',title:'Online Tutor',date:'2021 – 2024',bullets:['Delivered 2,000+ hours of technical instruction via LMS platforms and remote collaboration tools including screen sharing, virtual whiteboards, and real-time co-editing environments.','Supported students in Python, SQL, and math coursework — reinforcing technical communication and problem-solving skills directly applicable to IT help desk and support roles.']}
+];
+
+function runAz(){
+  const rTxt=document.getElementById('rTxt').value,jTxt=document.getElementById('jTxt').value;
+  if(!jTxt.trim()){alert('Paste a job description first.');return;}
+  const btn=document.getElementById('azBtn');
+  btn.disabled=true;btn.textContent='Analyzing...';
+  setTimeout(()=>{
+    const rSet=new Set(tok(rTxt));
+    const freq={};tok(jTxt).forEach(t=>freq[t]=(freq[t]||0)+1);
+    const jKws=Object.entries(freq).sort((a,b)=>b[1]-a[1]).map(([k])=>k).slice(0,40);
+    state.matching=jKws.filter(k=>rSet.has(k));
+    state.missing=jKws.filter(k=>!rSet.has(k)).slice(0,14);
+    state.score=Math.round((state.matching.length/Math.max(jKws.length,1))*100);
+    state.kws=new Set([...state.matching,...state.missing.slice(0,6)]);
+    const aS=['nlp','python','automation','machine','learning','ai','data','analysis','keyword'].filter(k=>state.kws.has(k)).length;
+    const wS=['javascript','html','css','web','frontend','dashboard'].filter(k=>state.kws.has(k)).length;
+    state.projOrder=aS>=wS?[0,1]:[1,0];
+
+    const sEl=document.getElementById('azScore');
+    sEl.textContent=state.score+'%';
+    sEl.className='score-num '+(state.score>=65?'hi':state.score>=40?'mid':'lo');
+    document.getElementById('azVerdict').textContent=state.score>=65?'Strong alignment — this role fits your profile well.':state.score>=40?'Partial match — targeted changes will close the gap.':'Low match — significant tailoring recommended.';
+    document.getElementById('azMatch').innerHTML=state.matching.slice(0,12).map(k=>`<span class="kwp m">${k}</span>`).join('');
+    document.getElementById('azMiss').innerHTML=state.missing.slice(0,10).map(k=>`<span class="kwp x">${k}</span>`).join('');
+    document.getElementById('azSuggestions').innerHTML=buildSuggestions(state.score,state.matching,state.missing,jTxt).map((s,i)=>`
+      <div class="suggestion-item">
+        <div class="sug-num">${String(i+1).padStart(2,'0')}</div>
+        <div class="sug-content"><div class="sug-label">${s.label}</div><div class="sug-text">${s.text}</div></div>
+      </div>`).join('');
+    document.getElementById('resumePreviewWrap').classList.remove('show');
+    document.getElementById('generateBtn').disabled=false;
+    document.getElementById('generateBtn').textContent='Generate Tailored Resume →';
+    document.getElementById('azResults').classList.add('show');
+    btn.disabled=false;btn.textContent='Run Again →';
+  },1300);
+}
+
+function buildSuggestions(score,matching,missing,jTxt){
+  const jL=jTxt.toLowerCase();const sugs=[];
+  if(missing.length>0)sugs.push({label:'Keyword Alignment',text:`Missing ${missing.length} keywords this role emphasizes. Naturally add: <strong>${missing.slice(0,5).join(', ')}</strong>. ATS systems scan for exact matches — mirror the job's phrasing.`});
+  if(score<40)sugs.push({label:'Overall Fit',text:'Match is below 40%. Reframe your strongest experiences around the role\'s core requirements and lead with the most relevant skills.'});
+  else if(score>=65)sugs.push({label:'Overall Fit',text:'Strong match. Focus your cover letter on your AI Resume Analyzer and Career Command Center — two shipped projects most candidates won\'t have.'});
+  else sugs.push({label:'Overall Fit',text:'Partial match. Reorder your skills to front-load what this role asks for, and lead with the most technically relevant bullets.'});
+  if(jL.includes('security+')||jL.includes('comptia'))sugs.push({label:'Certifications',text:'This role references CompTIA. Note Security+ as "In Progress" — it signals active momentum and commitment to the field.'});
+  else sugs.push({label:'Certifications',text:'Lead with your earned Google Cybersecurity Certificate — it validates SIEM, IDS/IPS, and incident response skills with a recognizable credential.'});
+  sugs.push({label:'Quantify Your Impact',text:'You have "2,000+ tutoring hours" — apply this everywhere. Add numbers to Burlington and Food Lion: transactions processed, issues resolved, uptime maintained.'});
+  sugs.push({label:'Hidden Differentiator',text:'Fluency in four languages (English, Bengali, Hindi, Urdu) is a rare differentiator in tech. Keep it visible — especially valuable at organizations with diverse teams or international scope.'});
+  return sugs.slice(0,5);
+}
+
+function hl(text,kws){
+  let out=text;
+  [...kws].forEach(kw=>{if(kw.length<3)return;const re=new RegExp(`\\b(${kw.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})\\b`,'gi');out=out.replace(re,'<span class="highlight-kw">$1</span>');});
+  return out;
+}
+
+function generateResume(){
+  const btn=document.getElementById('generateBtn');
+  btn.disabled=true;btn.textContent='Generating...';
+  setTimeout(()=>{
+    const kws=state.kws;
+    const ordered=state.projOrder.map(i=>PROJECTS[i]);
+    document.getElementById('resumeDoc').innerHTML=`
+<div class="rdoc-name">Arnob Mandal</div>
+<div class="rdoc-contact">arnobmandalwork@gmail.com &nbsp;|&nbsp; 571-427-8309 &nbsp;|&nbsp; linkedin.com/in/arnobmandal &nbsp;|&nbsp; github.com/arnobmandalwork-code</div>
+<div class="rdoc-divider"></div>
+<div class="rdoc-section">
+  <div class="rdoc-sec-title">Education</div>
+  <div class="rdoc-entry">
+    <div class="rdoc-entry-header"><div class="rdoc-entry-title">George Mason University</div><div class="rdoc-entry-date">Expected May 2027</div></div>
+    <div class="rdoc-entry-sub">B.S. Information Technology, Cybersecurity Concentration &nbsp;·&nbsp; Senior &nbsp;·&nbsp; Fairfax, VA</div>
+  </div>
+</div>
+<div class="rdoc-section">
+  <div class="rdoc-sec-title">Technical Skills</div>
+  <div class="rdoc-skills-grid">
+    <div class="rdoc-skill-cat">Languages</div><div class="rdoc-skill-val">${hl('Python, Java, JavaScript, SQL, HTML, CSS, Linux CLI, Bash',kws)}</div>
+    <div class="rdoc-skill-cat">Security</div><div class="rdoc-skill-val">${hl('SIEM, IDS/IPS, Vulnerability Assessment, Threat Analysis, Digital Forensics, Incident Response',kws)}</div>
+    <div class="rdoc-skill-cat">Tools</div><div class="rdoc-skill-val">${hl('Kali Linux, Wireshark, Metasploit, Nmap, Autopsy, Git, VS Code, Cisco Packet Tracer',kws)}</div>
+    <div class="rdoc-skill-cat">Concepts</div><div class="rdoc-skill-val">${hl('Network Security, File System Internals, Binary Analysis, Data Recovery, AI/ML Automation, Prompt Engineering',kws)}</div>
+    <div class="rdoc-skill-cat">Spoken</div><div class="rdoc-skill-val">English, Bengali, Hindi, Urdu</div>
+  </div>
+</div>
+<div class="rdoc-section">
+  <div class="rdoc-sec-title">Projects</div>
+  ${ordered.map(p=>`<div class="rdoc-entry"><div class="rdoc-entry-header"><div class="rdoc-entry-title">${p.title}</div><div class="rdoc-entry-date">${p.year}</div></div><div class="rdoc-entry-sub">${hl(p.stack,kws)}</div><ul class="rdoc-entry-desc">${p.bullets.map(b=>`<li>${hl(b,kws)}</li>`).join('')}</ul></div>`).join('')}
+</div>
+<div class="rdoc-section">
+  <div class="rdoc-sec-title">Certification</div>
+  <div class="rdoc-entry"><div class="rdoc-entry-header"><div class="rdoc-entry-title">Google Cybersecurity Professional Certificate</div><div class="rdoc-entry-date">Earned</div></div><ul class="rdoc-entry-desc"><li>${hl('SIEM, IDS/IPS, Vulnerability Assessment, Python, Linux, SQL',kws)}</li></ul></div>
+</div>
+<div class="rdoc-section">
+  <div class="rdoc-sec-title">Experience</div>
+  ${EXPERIENCE.map(e=>`<div class="rdoc-entry"><div class="rdoc-entry-header"><div class="rdoc-entry-title">${e.co} — ${e.title}</div><div class="rdoc-entry-date">${e.date}</div></div><ul class="rdoc-entry-desc">${e.bullets.map(b=>`<li>${hl(b,kws)}</li>`).join('')}</ul></div>`).join('')}
+</div>
+<div class="rdoc-section">
+  <div class="rdoc-sec-title">Activities</div>
+  <div class="rdoc-entry"><ul class="rdoc-entry-desc"><li><strong>Robotics</strong> — Engineered robotic systems with microcontrollers, embedded sensors, and motor drivers; competed in events focused on real-time autonomous control and hardware-software integration.</li></ul></div>
+</div>`;
+    document.getElementById('resumePreviewWrap').classList.add('show');
+    btn.textContent='Regenerate →';btn.disabled=false;
+    setTimeout(()=>document.getElementById('resumePreviewWrap').scrollIntoView({behavior:'smooth',block:'start'}),100);
+  },900);
+}
+
+function downloadPDF(){
+  const{jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  const W=210,M=20,col=W-M*2,lh=4.8;let y=M;
+  const black=[0,0,0],dark=[30,30,30],mid=[70,70,70];
+  const clean=h=>h.replace(/<[^>]+>/g,'').replace(/&nbsp;/g,' ').replace(/\s+/g,' ').trim();
+  function chk(n){if(y+(n||6)>278){doc.addPage();y=M;}}
+  doc.setFont('helvetica','bold');doc.setFontSize(18);doc.setTextColor(...black);doc.text('Arnob Mandal',M,y);y+=6.5;
+  doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(...mid);
+  doc.text('arnobmandalwork@gmail.com  |  571-427-8309  |  linkedin.com/in/arnobmandal  |  github.com/arnobmandalwork-code',M,y);
+  y+=3;doc.setDrawColor(...black);doc.setLineWidth(.5);doc.line(M,y,W-M,y);y+=5;
+  function section(t){chk(10);doc.setFontSize(7.5);doc.setFont('helvetica','bold');doc.setTextColor(...black);doc.text(t.toUpperCase(),M,y);y+=2.5;doc.setDrawColor(...black);doc.setLineWidth(.3);doc.line(M,y,W-M,y);y+=4;}
+  function eHead(title,date){chk(8);doc.setFontSize(9.5);doc.setFont('helvetica','bold');doc.setTextColor(...black);const tl=doc.splitTextToSize(clean(title),col-32);doc.text(tl,M,y);doc.setFontSize(8.5);doc.setFont('helvetica','normal');doc.setTextColor(...mid);doc.text(clean(date),W-M,y,{align:'right'});y+=lh*tl.length;}
+  function eSub(s){doc.setFontSize(8.5);doc.setFont('helvetica','italic');doc.setTextColor(...dark);const ls=doc.splitTextToSize(clean(s),col);doc.text(ls,M,y);y+=lh*ls.length+1;}
+  function eBullets(items){doc.setFontSize(8.5);doc.setFont('helvetica','normal');doc.setTextColor(...dark);items.forEach(b=>{chk(5);const ls=doc.splitTextToSize('• '+clean(b),col-4);ls.forEach(l=>{chk(5);doc.text(l,M+3,y);y+=lh;});});y+=2;}
+  function skillRow(cat,val){chk(5);doc.setFontSize(8.5);doc.setFont('helvetica','bold');doc.setTextColor(...black);doc.text(cat,M,y);doc.setFont('helvetica','normal');doc.setTextColor(...dark);const ls=doc.splitTextToSize(clean(val),col-26);doc.text(ls,M+26,y);y+=lh*ls.length+.5;}
+
+  section('Education');
+  eHead('George Mason University','Expected May 2027');
+  eSub('B.S. Information Technology, Cybersecurity Concentration  ·  Senior  ·  Fairfax, VA');
+
+  section('Technical Skills');
+  skillRow('Languages:','Python, Java, JavaScript, SQL, HTML, CSS, Linux CLI, Bash');
+  skillRow('Security:','SIEM, IDS/IPS, Vulnerability Assessment, Threat Analysis, Digital Forensics, Incident Response');
+  skillRow('Tools:','Kali Linux, Wireshark, Metasploit, Nmap, Autopsy, Git, VS Code, Google Workspace');
+  skillRow('Concepts:','Network Security, File System Internals, Data Recovery, Binary Analysis, AI/ML Automation, Prompt Engineering');
+  skillRow('Spoken:','English, Bengali, Hindi, Urdu');
+  y+=1;
+
+  section('Projects');
+  state.projOrder.map(i=>PROJECTS[i]).forEach(p=>{eHead(p.title,p.year);eSub(p.stack);eBullets(p.bullets);});
+
+  section('Certification');
+  eHead('Google Cybersecurity Professional Certificate','Earned');
+  eBullets(['SIEM, IDS/IPS, Vulnerability Assessment, Python, Linux, SQL']);
+
+  section('Experience');
+  EXPERIENCE.forEach(e=>{eHead(`${e.co} — ${e.title}`,e.date);eBullets(e.bullets);});
+
+  section('Activities');
+  eBullets(['Robotics — Engineered robotic systems with microcontrollers, embedded sensors, and motor drivers; competed in events focused on real-time autonomous control and hardware-software integration.']);
+
+  doc.save('Arnob_Mandal_Tailored_Resume.pdf');
+}
+</script>
